@@ -10,6 +10,7 @@ This is a python script that will open a file and check the IP of the file to ve
 '''
 
 # Import Packages
+import json
 import socket
 import errno
 import re
@@ -20,21 +21,22 @@ def find_IPs():
     # Create an empty list
     IPs = []
 
-    # Open the file and read over it
-    f = open(sys.argv[1], 'r')
-
-    # Make a Regular Expression object
+    # Make a Regular Expression object that searches for IP addresses
     regex = re.compile(r'\d*\.\d*\.\d*\.\d*')
 
-    # Itterate through all lines in the file
-    for line in f.readlines():
-        
-        # Check if the regex matches the line
-        m = regex.search(line)
+    try:
+        # Open the JSON file with the python JSON library reader
+        with open(sys.argv[1]) as json_data:
+            # Load the JSON file
+            data = json.load(json_data)
 
-        # If the regex is found...
-        if m:
-           IPs.append(m.group())
+            # Search for IP addresses in the JSON data and make them a list
+            IPs = regex.findall(str(data))
+
+    except:
+        # If there was an issue reading the JSON file. print and terminate
+        print("ERROR: FILE NOT IN JSON FORMAT TERMINATING PROGRAM")
+        exit(1)
 
     return IPs
 
@@ -47,7 +49,7 @@ def get_Host(ip_list):
         try:
             # Attempt to look-up the domain name
             host = socket.gethostbyaddr(ip)[0]
-        
+
         except:
             # Default to "NOT FOUND"
             host = "NOT_FOUND"
@@ -57,10 +59,10 @@ def get_Host(ip_list):
 
 # check_for_EC2() - Get the Amazon EC2 address
 def check_for_EC2(ip_addr, ip_name):
-    
+
     # Make a Regular Expression
     regex_EC2 = re.compile(r'ec2-(.*)')
-    
+
     # Search for EC2 Domain
     m_EC2 = regex_EC2.search(ip_name)
 
