@@ -73,20 +73,20 @@ def check_for_EC2(ip_addr, ip_name):
 # Main Function - look for IPs and test them using key functions
 def main():
     if (len(sys.argv) != 2):
-	print ("ERROR: ip-ranges.json must be the one and only argument.")
+	       print ("ERROR: ip-ranges.json must be the one and only argument.")
     else:
-	# Check to see that the json file is the one and only argument
-	if (sys.argv[1] != 'ip-ranges.json'):
-	    # Print error statement
-	    print ("ERROR: ip-ranges.json must be the one and only input file")
-	else:
-            # Create an empty list of IPs
-            IPs = []
-            IP_dict = {}
+    	# Check to see that the json file is the one and only argument
+    	if (sys.argv[1] != 'ip-ranges.json'):
+    	    # Print error statement
+    	    print ("ERROR: ip-ranges.json must be the one and only input file")
+    	else:
+                # Create an empty list of IPs
+                IPs = []
+                IP_dict = {}
 
-	    # Call the find_IPs function
-            IPs = find_IPs()
+    	    # Call the find_IPs function
+                IPs = find_IPs()
 
-            get_Host(IPs)
+                get_Host(IPs)
 
 main()
